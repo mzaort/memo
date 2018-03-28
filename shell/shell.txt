@@ -1,6 +1,7 @@
 ### problem solving ###
 advanced compliation error:
 OptimizerErrorManager 
+OptimizerException
 spring application startup fail:
 WARN
 ERROR
@@ -13,7 +14,9 @@ cancelling refresh attempt
 
 ### server config ###
 cd ~/elasticsearch/elasticsearch-2.3.5/bin
-nohup ./elasticsearch
+nohup ./elasticsearch &
+# show health status of document
+http://172.26.131.124:9200/_cat/indices
 
 restart redis: sudo /etc/init.d/redis-server start
 restart auth: sudo ./deploy-auth.sh
@@ -327,3 +330,122 @@ aria2c -k 1M -s 16 -x 16 --dir="/tmp" -o "auth.jar" \
 # change linux password
 passwd
 sudo passwd
+
+
+# read mail
+mutt -f ~/mbox
+sudo mutt -f /var/mail/root
+
+# jar package
+you can update your war from the command line using java commands as mentioned here:
+jar -uvf test.war yourclassesdir
+
+Command to unzip/explode the war file
+jar -xvf test.war
+
+Command to create the war file
+jar -cvf test.war yourclassesdir
+
+You can create .war file back from your existing folder. Using this command
+cd /to/your/folder/location
+jar -cvf my_web_app.war *
+
+last user # check the last login of user.
+
+# for each of shell script
+for i in {1..10}; do echo $i; done # no space in {1..10}
+for i in {1..10..2}; do echo $i; done # no space in {1..10}
+for i in `seq 1 10`; do echo $i; done
+for (( c=1; c<=5; c=c+2 )); do      echo "Welcome $c times"; done
+for (( c=1; c<=5; c++ )); do      echo "Welcome $c times"; done
+
+PS3='Choose (1-5)'; select name in a b c d; do break; done; echo "you choose $name"
+
+#npm
+npm install pkg
+npm install pkg -g
+npm install pkg@version
+npm install
+npm ls
+npm ls grunt
+npm update grunt-cli
+npm search grunt-cli
+
+#using cnpm
+npm install cnpm -g --registry=https://registry.npm.taobao.org
+
+#update nodejs
+npm cache clean --force
+npm install –g n --force
+n stable
+
+#check the usage of a directory
+du -sh ~/elasticsearch
+
+# change nginx session token
+location /hr-talentsearch/hue/hr/talentaccess {
+	proxy_pass http://172.26.142.46:9080/hue-hr-talentsearch-front-17.03.00.0003.20170518.1345/hue/hr/talentaccess;
+	access_log /var/log/nginx/nginx_tsf_http.log main;
+	include /etc/nginx/conf.d/common.conf;
+}
+
+location /ess/function/masterSearch {
+	proxy_pass https://jillk-develop.hue.worksap.com/contacts/function/masterSearch;
+	proxy_set_header cookie com.worksap.company.TOKEN=94e3304d-7ac5-45c6-ba22-129acf587554;
+	proxy_set_header x-csrf-token OTRlMzMwNGQtN2FjNS00NWM2LWJhMjItMTI5YWNmNTg3NTU0;
+	access_log /var/log/nginx/nginx_tsf_http.log main;
+	include /etc/nginx/conf.d/common.conf;
+}
+
+# linux network
+/etc/resolv.conf
+/etc/network/interfaces
+nm-tool
+nslookup www.baidu.com
+
+#working way
+sudo killall dnsmasq
+sudo dnsmasq --server=172.26.131.1
+
+#read mail
+sudo mutt -f /var/mail/root
+sudo cat /var/spool/mail/root
+sudo tac /var/spool/mail/root | less
+sudo mail -p | tac | less
+mail
+
+#crontab log
+less var/log/syslog | grep CRON
+
+#multi-thread download
+axel www.com/fsdfsj/fdsfs/fsd.txt
+
+# docker check logs
+docker logs --tail 2000 hue-bt
+
+# shell script
+cd /nonexistant
+if [ $? -ne 0 ]
+then
+    echo failed
+else
+    echo success!
+fi
+
+readlink -f file.txt # get the absolute path or get the symbolic reference
+
+mvn archetype:generate -DgroupId=com.acme \
+                       -DartifactId=my-webapp \
+                       -Dversion=1.0-SNAPSHOT \
+                       -DarchetypeArtifactId=maven-archetype-webapp \
+                       -DinteractiveMode=false
+example:
+mvn archetype:generate -DgroupId=org.mzaort.front -DartifactId=plaintext2 -Dversion=1.0-SNAPSHOT -DarchetypeArtifactId=maven-archetype-webapp -DinteractiveMo
+de=false
+
+git show --name-only # only show the changed files in one commit
+
+which python return the file location of python
+whereis python # find the target
+uname -a # check linux core
+lsb_release -a # ubuntu version

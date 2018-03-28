@@ -1,0 +1,10 @@
+# important github
+growing plan for programmers:
+https://github.com/mylxsw/growing-up
+
+deep into javascript
+https://github.com/mqyqingfeng/Blog/issues/9
+https://github.com/mqyqingfeng/Blog/issues?q=is%3Aissue+is%3Aopen+label%3A%E6%B7%B1%E5%85%A5%E7%B3%BB%E5%88%97
+
+shell script 
+https://arachnoid.com/linux/shell_programming.html

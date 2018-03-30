@@ -1,0 +1,121 @@
+https://docs.python.org/3.6/tutorial/index.html
+https://docs.python.org/3.6/index.html
+You can find document in installed directory
+
+Chapter 2: Math.String.Variable
+1.	integer no limit but double may overflow
+2.	/ default divide // default integer divide
+3.	import math | from math import * | from math import tan
+4.	''' ~~~~~ '''
+5.	len(str)
+	'a' + 'b'
+	'a' * 3
+	'a' + 3 will throw error, should use 'a' + str(3)
+	no automatic conversion between types?
+6.	find help:
+	dir(math)
+	dir(__builtins__)
+	dir(tan)
+	help(len) print(len.__doc__)
+	dir('') dir(12) dir(2.3)
+7.	tuple: x,y,z=1,2,3  x,y=y,x
+8.	3 < age < 7
+9.	int() float() str() round()
+	math.ceil() math.floor() math.trunc()
+10.	number and string are immutable
+
+Chapter 3: Write a program
+1.	IDLE: ctrl+n ctrl+s F5
+2.	using # to comment
+3.	a = input('please input your name') # a must be a string
+4.	print('a', 'b', 'c')
+	print('a', 'b', 'c', sep='.')
+	print('a', 'b', 'c', end='')
+5.	eval('3 + 4 * 8')
+
+Chapter 4: Control of flow
+1.	boolean: == != and or not
+	== can be used in any type, include array
+2.	if cond:
+	elif cond:
+	else:
+3.	for i in range(0,10): # 0~9 range(10) range(0, 10, 1)
+4.	i = 0
+	while i < 10:
+		print(i)
+		i = i+ 1
+
+Chapter 5: function
+1.	None
+2.	#area.py
+	import math
+	def area(radis):
+		'''
+		return area of a circle
+		>>> area(45)
+		'''
+		return math.pi * radis * radis;
+3.	print(area.__doc__)
+4.	local variable: define in a function or function arguments
+	global variable: outside a function. visible within a function, but assignemnt requires taking care of: global name
+5.	default arguments: all default must be at the last
+	def greeting(name, greet='hello'):
+		'''
+		'''
+		print(greet, name, '!')
+6.	keyword arguments: must after positional arguments
+	greeting(name='go')
+	greeting(greet='hell')
+7.	module: a collection of doc, variable & function
+8.	python arguments are strict, first positional, then keyword(optional). all postional must be one to one.
+
+Chapter 6: Strings
+1.	string[-1]
+2.	ord(char) <-> chr(int)
+3.	str[2] str[2:6] str[2:] str[:6] str[1,-1]
+4.	dir('') # get string function help
+
+Chapter 7: data structures
+1.	type type(1) type(None) type(print)
+2.	sequence: string tuple array # len + * in, 0..len-1, -len..-1
+	tuple: (), (5,), (1,2,3) # immutable
+3.	list, array: append count extend index insert pop remove reverse sort
+	list resolution: [n * n for n in range(1,20)] [n for n in range(1,20) if n > 3]
+4.	dictionary: dict={'red':1, 'blue':1, 'green':2}
+	items, keys, values, get pop popitem clear copy fromkeys setdefault update
+5.	set: s=set([12,2,1,1,1,231,3,13,13,1])
+
+Chapter 8: I/O
+1.	format output: print('int %d, float %.2f, string %s' % (1, 1.31, 'e312'))
+2.	string format: 'My {pet} has {prob}'.format(pet='dog', prob='fleas')
+	'My {0} has {1}'.format('dog', 'fleas')
+	'1/81 = {x:.3f}'.format(x=1/81)
+	'1/81 = {x:.{d}f}'.format(x=1/81, d=4)
+3.	import os: getcwd listdir chdir path.isfile path.isdir stat
+	see printfile.py
+	import pickle: read/write object see pickfile.py
+4.	import urllib.request
+	page = urllib.request.urlopen('http://www.python.org');
+	print(page.read());
+
+	import webbrowser
+	webbrowser.open('www.baidu.com')
+
+Chapter 9: Exceptions
+1.	try:
+	except ValueError:
+
+	try:
+	except (ValueError, TypeError):
+
+	try:
+	except:
+
+	try:
+	except:
+	finally:
+
+Chapter 10: Object-oriented programming
+1.	see person.py, oop.py
+
+CAse STudy: text statistics

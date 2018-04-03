@@ -449,3 +449,26 @@ which python return the file location of python
 whereis python # find the target
 uname -a # check linux core
 lsb_release -a # ubuntu version
+
+# bash indirectly reference
+$ export xyzzy=plugh ; export plugh=cave
+
+$ echo ${xyzzy}  # normal, xyzzy to plugh
+plugh
+
+$ echo ${!xyzzy} # indirection, xyzzy to plugh to cave
+cave
+
+dd=c
+cs=123
+eval N=\${${dd}s}
+echo $N=>123
+
+# vim practice
+:version # show vim info
+
+# login to auth
+sudo docker exec -it hue-auth bash
+
+bash -n scriptname # check grammar of your script
+bash -v scriptname # set -x

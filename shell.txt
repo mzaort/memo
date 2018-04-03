@@ -1,0 +1,474 @@
+### problem solving ###
+advanced compliation error:
+OptimizerErrorManager 
+OptimizerException
+spring application startup fail:
+WARN
+ERROR
+Exception
+BeanInstantiationException
+BeanCreationException
+BeanDefinitionStoreException
+Bean[a-zA-Z]+Exception
+cancelling refresh attempt
+
+### server config ###
+cd ~/elasticsearch/elasticsearch-2.3.5/bin
+nohup ./elasticsearch &
+# show health status of document
+http://172.26.131.124:9200/_cat/indices
+
+restart redis: sudo /etc/init.d/redis-server start
+restart auth: sudo ./deploy-auth.sh
+ 
+/home/release00/kafka/kafka_2.11-0.10.0.0
+nohup bin/zookeeper-server-start.sh config/zookeeper.properties > zookeeper.log & 2>&1
+nohup bin/kafka-server-start.sh config/server.properties > kafka.log & 2>&1
+
+bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+bin/kafka-topics.sh --list --zookeeper localhost:2181
+bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test
+bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
+
+./bin/kafka-consumer-offset-checker.sh --group company_hue_front-autoindex-group --topic com.worksap.company.framework.entity.modification.EntityModificationMessage-t-company-ess-advanced --zookeeper localhost:2181
+ 
+bin/kafka-topics.sh --list --zookeeper localhost:2181
+bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic com.worksap.company.framework.entity.modification.EntityModificationMessage-t-company-ess-advanced
+bin/kafka-topics.sh --zookeeper localhost:2181 --delete --topic com.worksap.company.framework.entity.modification.EntityModificationMessage-t-company-ess-advanced
+bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic com.worksap.company.framework.entity.modification.EntityModificationMessage-t-company-ess-advanced
+bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 -topic com.worksap.company.framework.entity.modification.EntityModificationMessage-t-company-ess-advanced --time -1
+
+set /consumers/bt_es_consumer-autoindex-group/offsets/com.worksap.company.framework.entity.modification.EntityModificationMessage-t-company-ess-advanced/0 4586
+get /consumers/bt_es_consumer-autoindex-group/offsets/com.worksap.company.framework.entity.modification.EntityModificationMessage-t-company-ess-advanced/0
+
+#maven
+mvn eclipse:eclipse -DdownloadSources=true -DdownloadJavadocs=true
+#redis
+redis-cli
+
+# check zookeeper/kafka status
+nc -vz 172.26.131.139 2181
+nc -vz 172.26.131.139 9092
+
+# nginx
+http://www.thegeekstuff.com/2017/08/nginx-rewrite-examples/ nginx rewrite
+rewrite '^(?!(/UI-component-front|(/([^/]*)/img/))' '/preheating' last; # nginx not
+
+#cassandra
+nodetool cfstats
+nodetool status framework0001
+nodetool <options> listsnapshots
+
+keyspaces=$(echo desc keyspaces | cqlsh | xargs -n1 echo | grep -v ^system)
+for ks in $keyspaces; do
+    echo Dropping $ks
+    echo "drop keyspace $ks;" | cqlsh
+done
+
+DROP KEYSPACE framework0001;
+DROP KEYSPACE hecos;
+DROP KEYSPACE bt;
+
+To delete all snapshots for a node, run the nodetool clearsnapshot command. For example:
+$ nodetool -h localhost -p 7199 clearsnapshot
+To delete snapshots on all nodes at once, run the nodetool clearsnapshot command using a parallel ssh utility.
+
+To delete a single snapshot, run the clearsnapshot command with the snapshot name:
+$ nodetool clearsnapshot -t <snapshot_name>
+The file name and path vary according to the type of snapshot. See nodetools snapshot for details about snapshot names and paths.
+
+### linux command ###
+zip docker-script.zip *
+zip -r config.zip *
+
+cp -vf file1 file2
+cp -r fold1 fold2
+
+export KKK=1
+unset KKK
+
+readlink -f file # read the symbolic value of a file
+source and . are synonymous in Bash. The source command can be used to load any functions file into the current shell script or a command prompt. It read and execute commands from given FILENAME and return.
+
+# the content of d.txt, try to sort it based on the number
+fjsfjsl 4324
+fjsdlfj 3242432
+fjsfjslfsjf 423423
+fsdfds 432
+cat d.txt  | sed  's/.* \([0-9]\+\)$/\1/' | sort -n #-nr
+nodetool cfstats | grep 'Space used (total)' | sed  's/.* \([0-9]\+\)$/\1/' | sort -n
+
+# make statistics of Disk Usage of a file/folder
+du -sh file_path
+
+sudo ufw disable #close firewall
+sudo ufw enable #open firewall
+
+hostname -I #return ip address.
+
+netstat -lnap | grep <port>
+#The output has the process id in it
+kill -9 <pid>
+# After the process is killed, try starting the service.
+# clean kafka logs
+rm -rf /tmp/kafka-logs/*
+ 
+dirname /root/user -> /root
+basename ~/Documents/a.txt -> a.txt
+echo "hello.txt" | sed 's/.*\.\([^.]*\)/\1/' # extract file type
+readlink
+
+unset
+
+stat -c %y file
+echo "2-1" | bc
+
+netstat -tlp #network information
+nslookup google.com #find dns
+
+curl -IL --write-out %{http_code} --silent --output /dev/null ${URL} # get return code
+curl -IL --write-out %{http_code} --silent --output /dev/null www.google.com
+
+http://www.mechanicalfish.net/start-learning-ansible-with-one-line-and-no-files/
+using ansible, ansible is a tool to manage cluster
+
+### sed command ###
+http://blog.jobbole.com/109088/ learn sed in 30 minutes
+insert
+sed -i '$ a goog.go' a.txt //add last
+sed -i '3a goog.godd' a.txt // add line 3
+ 
+delete
+sed -i '/pattern/d' filename : sed -i "/.*go.*/d" a.txt
+grep -v "pattern" filename > filename2; mv filename2 filename
+ 
+replace
+sed -i -e 's/few/asd/g' a.txt
+find . -name "*.java" | xargs sed -i -e 's/@JsonInclude(Include.NON_EMPTY)/@JsonInclude(Include.NON_NULL)/g'
+find . -name "*.java" | xargs sed -i -e 's/@JsonInclude(JsonInclude.Include.NON_EMPTY)/@JsonInclude(JsonInclude.Include.NON_NULL)/g'
+
+template replace
+sed -e 's/{% echo framework_root %}/'"${CFW_ROOT//\//\\\/}"'/'\
+  -e 's/{% echo ess_root %}/'"${ESS_ROOT//\//\\\/}"'/'\
+  -e 's/{% echo collabo_root %}/'"${COLLABO_ROOT//\//\\\/}"'/'\
+  "pom.xml.tmpl" > "pom.xml"
+
+extract version info
+grep -F "<$VERSION_TYPE>" "$HUE_WORKSPACE_DIR"/hue-collabo-pom/hue-collabo-client-side/pom.xml | sed 's/.*<'"$VERSION_TYPE"'>\([^<]*\)<\/'"$VERSION_TYPE"'>/\1/'
+
+# replace all
+find . -name pom.xml | xargs sed -i 's/\(.*\)\.flattened-pom\.xml/\1<value>\.flattened-pom\.xml<\/value>/'
+
+sed -n 'h;p;n;H' books.txt # remove even line
+sed -n '1~2 p' books.txt # remove even line
+
+sed -n 'p p' books.txt # wrong expression
+sed -n 'p; p' books.txt # correct expresion
+
+sed 's/\([[:digit:]]\)/Book number \1/' books.txt
+sed 's/\(\d*\)/Book number \1/' books.txt
+
+# sed regexp: https://www.gnu.org/software/sed/manual/html_node/Regular-Expressions.html
+git log | head -1 | sed 's/commit \([^\n]*\)/\1/'
+git log | head -1 | sed 's/commit \([^\s]*\)/\1/'
+git log | head -1 | sed -E 's/[^\d]+\s+([^\n]*)$/\1/' # or -r
+
+echo "hello.txt" | sed 's/.*\.\([^.]*\)/\1/' # extract file type
+grep -F "<$VERSION_TYPE>" "$HUE_WORKSPACE_DIR"/hue-collabo-pom/hue-collabo-client-side/pom.xml | sed 's/.*<'"$VERSION_TYPE"'>\([^<]*\)<\/'"$VERSION_TYPE"'>/\1/'
+
+
+### xpath ###
+By.xpath("//td[@class='goog-palette-cell' and contains(@aria-label, 'RGB')]")
+By.xpath("//div[text()='Pivot Table1']")
+
+### github ###
+method to visit different git repo in one machine
+from: http://mherman.org/blog/2013/09/16/managing-multiple-github-accounts/#.Wgk9HRCWZjV
+
+cd ~/.ssh
+ssh-keygen -t rsa -C "mzaort@gmail.com"
+#save it as id_rsa_github when prompted
+
+#cp the key to github settings
+
+#change ~/.ssh/config
+vim config
+
+# add following code
+Host github.com
+  User git
+  HostName github.com
+  IdentityFile ~/.ssh/id_rsa_github
+  StrictHostKeyChecking no
+
+# using local ssh key file.
+git config --local core.sshCommand "ssh -i /home/release00/.ssh/id_rsa_mi_z -F /dev/null"
+ssh -Tvvv git@gitlab.myserver.com
+if git fetch ask your to input password. please check `git remote -v` to see whether it is http or https
+
+https://stackoverflow.com/questions/4565700/specify-private-ssh-key-to-use-when-executing-shell-command-with-or-without-ruby
+https://superuser.com/questions/232373/how-to-tell-git-which-private-key-to-use
+#using a different rsa to add rsa, sad only work in clone
+ssh-agent bash -c "ssh-add /home/release00/.ssh/id_rsa_mi_z; git clone git@scm.hue.workslan:mi_z/team-env-script.git"
+
+### git ###
+git fetch --tags
+git diff HEAD~3 --name-only
+git diff -p
+git diff -p -2
+git log -p -- **spreadsheet-controller.js
+git log --author=mi_z --grep=valid --oneline --all-match
+
+git branch --no-merge
+git branch --merge
+ 
+git checkout --track origin/serverfix
+git checkout -b [branch] [origin]/[master]
+ 
+git rebase --onto master server client
+pickup client branch, find the changes after client and server 's common ancestor, perform the changes on it.
+git rebase master server
+
+### config environment ###
+1. download installer
+mkdir Temp
+cd Temp
+wget http://bt-ci.hue.workslan/jenkins/job/environment-manager-nexus-deploy/lastSuccessfulBuild/artifact/target/installer-hue-development-linux-shanghai.zip
+upzip *.zip
+ 
+2. install
+./pre-install.sh
+./install.sh
+
+3. download project
+
+### docker ###
+
+docker ps -a
+service docker start
+docker search $key
+docker pull $name
+# run command in docker
+docker run learn/tutorial echo "hello word"
+# install in docker
+docker run learn/tutorial apt-get install -y ping
+# save changes
+docker ps -l
+docker commit $id $new_name
+# check images
+docker inspect $id
+# see logs
+docker logs -f hue-auth
+
+# ref
+https://docs.docker.com/get-started
+https://docs.docker.com/samples/
+
+# restart all dockers
+docker start -a -i `docker ps -q -l`
+Explanation:
+docker start start a container (requires name or ID)
+-a attach to container
+-i interactive mode
+docker ps List containers 
+-q list only container IDs
+-l list only last created container
+
+### shell script ###
+MYVAR=sometext
+echo "double quotes gives you $MYVAR"
+echo 'single quotes gives you $MYVAR'
+ 
+double quotes gives you sometext
+single quotes gives you $MYVAR
+
+How to deploy a war directly into tomcat
+1. copy .war to tomcat/webapps/
+2. change setenv.sh (environment variable)
+3. start bin/startup.sh
+
+# Say you have three strings
+a="this is a line"
+b="this is"
+c="a line"
+echo ${a#"$b"} #To remove prefix b from a
+echo ${a%"$c"} #To remove suffix c from a
+
+#Grep short variant (idea borrowed from sed one):
+ 
+$ echo -e "String1\nString2" | grep -zoP '^(.*)(?=.*?\n\1)'
+String
+
+//Access xpath in chrome
+one can use $x in the Chrome javascript console. No extensions needed.
+ex: $x("//img")
+Also the search box in the web inspector will accept xpath
+
+${variable+x} return x if variable exists or "" otherwise
+${variable-x} return variable if variable exists or x otherwise
+
+${#INCLUDE_LOCATION[@]} -gt 0 # array length is greater than 0
+
+# array in shell script
+aaa=()
+aaa+=("dd")
+echo $aaa
+aaa+=("fdsf")
+echo $aaa
+echo ${aaa[@]}
+
+# redirect file descriptor 
+https://unix.stackexchange.com/questions/18899/when-would-you-use-an-additional-file-descriptor/18904#18904
+
+mkdir -p f1/f2/f3
+
+# multiple thread downloading
+# https://aria2.github.io/
+aria2c -k 1M -s 16 -x 16 --dir="/tmp" -o "auth.jar" \
+  http://product-ci:8081/nexus/content/groups/hue-product/com/worksap/company/hue-auth-web/"$AUTH_VER"/hue-auth-web-"$AUTH_SNAPSHOT".jar
+
+# change linux password
+passwd
+sudo passwd
+
+
+# read mail
+mutt -f ~/mbox
+sudo mutt -f /var/mail/root
+
+# jar package
+you can update your war from the command line using java commands as mentioned here:
+jar -uvf test.war yourclassesdir
+
+Command to unzip/explode the war file
+jar -xvf test.war
+
+Command to create the war file
+jar -cvf test.war yourclassesdir
+
+You can create .war file back from your existing folder. Using this command
+cd /to/your/folder/location
+jar -cvf my_web_app.war *
+
+last user # check the last login of user.
+
+# for each of shell script
+for i in {1..10}; do echo $i; done # no space in {1..10}
+for i in {1..10..2}; do echo $i; done # no space in {1..10}
+for i in `seq 1 10`; do echo $i; done
+for (( c=1; c<=5; c=c+2 )); do      echo "Welcome $c times"; done
+for (( c=1; c<=5; c++ )); do      echo "Welcome $c times"; done
+
+PS3='Choose (1-5)'; select name in a b c d; do break; done; echo "you choose $name"
+
+#npm
+npm install pkg
+npm install pkg -g
+npm install pkg@version
+npm install
+npm ls
+npm ls grunt
+npm update grunt-cli
+npm search grunt-cli
+
+#using cnpm
+npm install cnpm -g --registry=https://registry.npm.taobao.org
+
+#update nodejs
+npm cache clean --force
+npm install –g n --force
+n stable
+
+#check the usage of a directory
+du -sh ~/elasticsearch
+
+# change nginx session token
+location /hr-talentsearch/hue/hr/talentaccess {
+	proxy_pass http://172.26.142.46:9080/hue-hr-talentsearch-front-17.03.00.0003.20170518.1345/hue/hr/talentaccess;
+	access_log /var/log/nginx/nginx_tsf_http.log main;
+	include /etc/nginx/conf.d/common.conf;
+}
+
+location /ess/function/masterSearch {
+	proxy_pass https://jillk-develop.hue.worksap.com/contacts/function/masterSearch;
+	proxy_set_header cookie com.worksap.company.TOKEN=94e3304d-7ac5-45c6-ba22-129acf587554;
+	proxy_set_header x-csrf-token OTRlMzMwNGQtN2FjNS00NWM2LWJhMjItMTI5YWNmNTg3NTU0;
+	access_log /var/log/nginx/nginx_tsf_http.log main;
+	include /etc/nginx/conf.d/common.conf;
+}
+
+# linux network
+/etc/resolv.conf
+/etc/network/interfaces
+nm-tool
+nslookup www.baidu.com
+
+#working way
+sudo killall dnsmasq
+sudo dnsmasq --server=172.26.131.1
+
+#read mail
+sudo mutt -f /var/mail/root
+sudo cat /var/spool/mail/root
+sudo tac /var/spool/mail/root | less
+sudo mail -p | tac | less
+mail
+
+#crontab log
+less var/log/syslog | grep CRON
+
+#multi-thread download
+axel www.com/fsdfsj/fdsfs/fsd.txt
+
+# docker check logs
+docker logs --tail 2000 hue-bt
+
+# shell script
+cd /nonexistant
+if [ $? -ne 0 ]
+then
+    echo failed
+else
+    echo success!
+fi
+
+readlink -f file.txt # get the absolute path or get the symbolic reference
+
+mvn archetype:generate -DgroupId=com.acme \
+                       -DartifactId=my-webapp \
+                       -Dversion=1.0-SNAPSHOT \
+                       -DarchetypeArtifactId=maven-archetype-webapp \
+                       -DinteractiveMode=false
+example:
+mvn archetype:generate -DgroupId=org.mzaort.front -DartifactId=plaintext2 -Dversion=1.0-SNAPSHOT -DarchetypeArtifactId=maven-archetype-webapp -DinteractiveMo
+de=false
+
+git show --name-only # only show the changed files in one commit
+
+which python return the file location of python
+whereis python # find the target
+uname -a # check linux core
+lsb_release -a # ubuntu version
+
+# bash indirectly reference
+$ export xyzzy=plugh ; export plugh=cave
+
+$ echo ${xyzzy}  # normal, xyzzy to plugh
+plugh
+
+$ echo ${!xyzzy} # indirection, xyzzy to plugh to cave
+cave
+
+dd=c
+cs=123
+eval N=\${${dd}s}
+echo $N=>123
+
+# vim practice
+:version # show vim info
+
+# login to auth
+sudo docker exec -it hue-auth bash
+
+bash -n scriptname # check grammar of your script
+bash -v scriptname # set -x

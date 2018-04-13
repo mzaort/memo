@@ -1,0 +1,242 @@
+Chapter 1: basics
+
+while read line ; do echo $line ; done < a.txt
+
+bash script.sh
+./script.sh # chmod +x
+
+~/.bashrc ~/.bash_profile ~/.bash_history
+
+cmd1 ; cmd2 <=>
+cmd1
+cmd2
+
+escape ' "" !
+\t \n
+echo -e "1\t2\t3"
+
+printf "%-5s %-10s %-4s\n" No Name Mark
+printf "%-5s %-10s %-4.2f\n" 1 Sarath 80.3456
+printf "%-5s %-10s %-4.2f\n" 2 James 90.9989
+printf "%-5s %-10s %-4.2f\n" 3 Jeff 77.564
+
+#print color string
+echo -e "\e[1;31m This is red text \e[0m"
+reset = 0, black = 40, red = 41, green = 42, yellow = 43, blue = 44, magenta = 45, cyan = 46, and white=47
+
+In Bash, the value for every variable is string, regardless of whether we assign variables with quotes or without quotes.
+
+# all is an file
+cat /proc/$PID/environ # find the env of the process is using
+pgrep java #get pid of process
+sudo cat /proc/1103/environ | tr '\0' '\n'
+
+Environment variables are variables that are not defined in the current process, but are received from the parent processes.
+HTTP_PROXY=192.168.1.23:3128
+export HTTP_PROXY
+
+export PATH="$PATH:/home/user/bin" or 
+PATH="$PATH:/home/user/bin"
+export PATH
+
+${#var} # find string length
+
+# judge whether a root user
+if [ $UID -ne 0 ]; then
+	echo Non root user. Please run as root.
+else
+	echo Root user
+fi
+
+cat ~/.bashrc | grep PS1 # Prompt String 1
+
+prepend() { [ -d "$2" ] && eval $1=\"$2':'\$$1\" && export $1; }
+prepend PATH /opt/myapp/bin
+
+The Bash shell environment can perform basic arithmetic operations using the commands let, (( )), and []. The two utilities expr and bc are also very helpful in performing advanced operations.
+let r=number1+number2
+result=$[ no1 + no2 ]
+result=$(( no1 + 50 ))
+result=`expr 3 + 4`
+echo "4 * 0.56" | bc
+echo "scale=2;3/8" | bc
+echo "obase=2;$no" | bc
+echo "sqrt(100)" | bc #Square root
+echo "10^10" | bc #Square
+
+command | tee FILE1 FILE2 | cat -n
+
+tee x <<EOF
+cat <<EOF >log.txt
+
+echo this is a test line > input.txt
+exec 3<input.txt
+cat <&3
+
+exec 4>output.txt
+echo newline >&4
+cat output.txt
+
+exec 5>>input.txt #append
+
+#arrays
+array_var=(1 2 3 4 5 6)
+or
+array_var[0]="test1"
+array_var[1]="test2"
+array_var[2]="test3"
+array_var[3]="test4"
+array_var[4]="test5"
+array_var[5]="test6"
+
+array+=(2)
+echo ${array_var[*]}
+echo ${array_var[*]}
+echo ${array_var[0]}
+echo ${array_var[$index]}
+
+#associativie arrays
+declare -A ass_array
+fruits_value=([apple]='100dollars' [orange]='150 dollars')
+echo "Apple costs ${fruits_value[apple]}"
+echo ${!array_var[*]} #list index of array
+echo ${!array_var[@]}
+
+#alias
+alias install='sudo apt-get install'
+echo 'alias cmd="command seq"' >> ~/.bashrc
+alias rm='cp $@ ~/backup && rm $@'
+
+#grabbing information about the terminal
+tput
+stty -echo
+stty echo
+
+# date
+date
+date +%s # epoch
+date --date "Thu Nov 18 08:07:21 IST 2010" +%s #input a date to format
+
+# debug
+bash -x script.sh # -v -n
+set -x ... set +x
+#!/bin/bash -vx
+
+# args
+$1 is the first argument
+$2 is the second argument
+$n is the nth argument
+"$@"expands as "$1" "$2" "$3" and so on
+"$*" expands as "$1c$2c$3", where c is the first character of IFS
+"$@" is used more often than "$*"since the former provides all arguments as a single string
+
+export -f fname # export function to its subprocess
+
+# Spawning a separate process with subshell
+pwd;
+(cd /bin; ls);
+pwd;
+
+read -n 2 var
+read -s var
+read -p 'Enter input:' var
+read -t timeout var
+read -d delim_char var
+
+# repeat until succeed
+repeat() { while true; do $@ && return; done } # /bin/true
+repeat() { while :; do $@ && return; done } # faster
+
+# Field separators and iterators
+data="name,sex,rollno,location"
+To read each of the item in a variable, we can use IFS.
+oldIFS=$IFS
+IFS=,
+for item in $data; do echo $data ; done
+IFS=$oldIFS
+
+default IFS: newline, tab, or a space character
+
+${str:0:1} # read by char
+
+# for in
+for var in list;
+do
+commands; # use $var
+done
+list can be a string, or a sequence.
+sequence: {1..50} {a..b} {A..Z} seq
+# for (( ))
+for((i=0;i<10;i++)) { echo $i ; };
+
+# while
+while condition
+do
+commands;
+done
+
+# until
+x=0;
+until [ $x -eq 9 ];
+do
+let x++; echo $x;
+done
+
+[ condition ] && action;
+[ condition ] || action;
+
+String comparisons: While using string comparison, it is best to use double square
+brackets, since the use of single brackets can sometimes lead to errors.
+[[ $str1 != $str2 ]]
+[[ -n $str1 ]] && [[ -z $str2 ]]
+
+Chapter 2: Have a good command
+#scrit
+script -t 2> timing.log -a output.session
+type commands;
+...
+exit
+scriptreplay timing.log output.session
+The timing.log and output.session can be shared to others to run
+
+#find
+find . \( -name "*.txt" -o -name "*.pdf" \) -print # treat is as a single unit
+find /home/users -path "*/slynux/*"
+find . -regex ".*\(\.py\|\.sh\)$"
+find . ! -name "*.txt" -print
+find . -type d
+find . -type f -atime -7 -print
+find . -type f -name "*.swp" -delete
+find . -type f -user root -exec chown slynux {} \;
+
+# xargs
+cat example.txt
+1 2 3 4 5 6
+7 8 9 10
+11 12
+cat example.txt | xargs # print in one line
+1 2 3 4 5 6 7 8 9 10 11 12
+cat example.txt | xargs -n 3 # 3 token in one line
+echo "splitXsplitXsplitXsplit" | xargs -d X
+split split split split
+cat args.txt | xargs -n 1 ./cecho.sh
+
+INPUT | xargs -n X # For executing a command with X arguments per each execution
+find . -type f -name "*.txt" -print0 | xargs -0 rm -f #print0 using \0 as delimiter and -0 set xargs's delimiter as \0
+
+# subshell trick
+cat files.txt | ( while read arg; do cat $arg; done )
+#Equivalent to cat files.txt | xargs -I {} cat {}
+
+# tr
+echo "HELLO WHO IS THIS" | tr 'A-Z' 'a-z'
+echo 12345 | tr '0-9' '9876543210'
+echo "tr came, tr saw, tr conquered." | tr 'a-zA-Z' 'n-za-mN-ZA-M' #encrypt
+echo "tr came, tr saw, tr conquered." | tr 'a-zA-Z' 'n-za-mN-ZA-M' #decrypt
+cat file.txt | tr -d '[set1]' #Only set1 is used, not set2
+echo hello 1 char 2 next 4 | tr -d -c '0-9 \n' => 1 2 4
+echo "GNU is not UNIX. Recursive right ?" | tr -s ' '
+cat sum.txt | echo $[ $(tr '\n' '+' ) 0 ]
+
+
+[[ "huehue00" == "hue"* ]] && echo 1 # * outside

@@ -1,6 +1,6 @@
 Chapter 1: basics
 
-while read line ; do echo $line ; done < a.txt
+while read line ; do echo $line ; done < a.txt # file as stdin
 
 bash script.sh
 ./script.sh # chmod +x
@@ -189,6 +189,7 @@ String comparisons: While using string comparison, it is best to use double squa
 brackets, since the use of single brackets can sometimes lead to errors.
 [[ $str1 != $str2 ]]
 [[ -n $str1 ]] && [[ -z $str2 ]]
+[[ "huehue00" == "hue"* ]] && echo 1 # * outside
 
 Chapter 2: Have a good command
 #scrit
@@ -238,5 +239,449 @@ echo hello 1 char 2 next 4 | tr -d -c '0-9 \n' => 1 2 4
 echo "GNU is not UNIX. Recursive right ?" | tr -s ' '
 cat sum.txt | echo $[ $(tr '\n' '+' ) 0 ]
 
+# checksum
+md5sum filename
+md5sum -c filename.md5
+md5deep -r directory > directory.md5
+<=> find directory -type f -print0 | xargs -0 md5sum >> directory.md5
+sha1sum
 
-[[ "huehue00" == "hue"* ]] && echo 1 # * outside
+# cryptographic and hash
+crypt <input_file >output
+crypt PASSPHRASE <input_file >output_file
+crypt PASSPHRASE -d <encrypted_file >output_file
+gpg
+base64 filename >outputfile
+base64 -d file >outputfile
+opensslpasswd -1 -salt SALT_STRING PASSWORD
+
+sort files...
+sort -nrMmd
+sort | uniq
+sort -C file # judge whether it's sorted return 0 if sorted
+sort -k 2 data.txt # sorted by 2th column
+sort -nk 2,3 data.txt # sorted by 2-3 char
+sort unsorted | uniq -ucdswz
+
+# tmp file.folder
+file=`mktemp`
+dire=`mktemp -d`
+nameonly=`mktemp -u`
+mktemp XXX.txt
+
+#spliting files and data
+split -b 10k data.file
+split -b 10k data.file -d -a 4
+csplit
+
+${var#str} # str could be a wildcard matching
+${var#.*} ${var##.*}
+
+#rename
+rename *.JPG *.jpg
+rename 's/ /_/g' *
+rename 'y/a-z/A-Z' *
+find path -type f -name "*.mp3" -exec mv {} target_dir \;
+find path -type f -exec rename 's/ /_/g' {} \;
+
+#spell check
+grep "^$1$" /usr/share/dict/british-english -q
+grep "^word" filepath <=> look word filepath # add "" to void shell expanding
+
+echo -e "1\nhello\n" | ./interactive.sh
+./interactive.sh < input.data
+
+# spawn and expect for automatic script
+spawn ./interactive .sh
+expect "Enter number:"
+send "1\n"
+expect "Enter name:"
+send "hello\n"
+expect eof
+
+# multi-thread
+#/bin/bash
+#filename: generate_checksums.sh
+PIDARRAY=()
+for file in File1.iso File2.iso
+do
+	md5sum $file &
+	PIDARRAY+=("$!")
+done
+wait ${PIDARRAY[@]}
+
+for ip in 192.168.0.{1..255} ; do
+	(
+	ping $ip -c2 &> /dev/null ;
+	if [ $? -eq 0 ]; then
+		echo $ip is alive
+	fi
+	)&
+done
+wait # wait all subshell process
+
+Chapter 3 FILE in/out
+
+# create fixed size of file
+dd if=/dev/zero of=junk.data bs=1M count=1
+# compare file
+comm A.txt B.txt -1/2/3 # 1only in A, 2 only in B, 3 both in AB
+# A+B-AjB
+comm A.txt B.txt -3 | sed 's/^\t//'
+# A-B
+comm A.txt B.txt -2 -3
+
+chmod u/a/o+rwx file
+chmod 777 file
+chown user.group filename
+chmod 777 . -R
+chown user.group . -R
+chattr +i file # become immutable
+
+touch file # create file
+ln -l -s /var/www/ ~/web
+file /etc/passwd # print file type
+
+#
+while read line ; do
+
+done < <(find $path -type f -print)
+Note that the first < is for input redirection and the second < is for converting the subprocess output to a filename.
+
+# file as disk: loopback file
+dd if=/dev/zero of=loobackfile.img bs=1G count=1
+mkfs.ext4 loopbackfile.img
+file loobackfile.img
+mkdir /mnt/loopback
+mount -o loop loopbackfile.img /mnt/loopback #The -o loop additional option is used to mount loopback filesystems
+
+#manually setup
+losetup /dev/loop1 loopbackfile.img
+mount /dev/loop1 /mnt/loopback
+
+# diff file
+diff -u version1.txt version2.txt
+diff -u version1.txt version2.txt > version.patch
+patch -p1 version1.txt <version.patch
+diff -Naur directory1 directory2
+
+#head & tail
+tail -f growing_file
+tail -f file --pid $PID # stop tail until PID terminates
+
+#pushd popd dirs
+pushd +3
+cd -
+
+# 
+wc -cwl file
+wc -L file
+
+# list file in tree
+tree ~/unixfs
+tree directory -P wildcard
+tree directory -I wildcard # inverse
+tree PATH -H http://localhost -o out.html
+
+Chapter 4 texting & driving
+#regular exp
+http://www.linuxforu.com/2011/04/sed-explained-part-1/
+https://regexper.com/ #visualize regular expression
+http://www.tldp.org/LDP/GNU-Linux-Tools-Summary/html/x11655.htm
+
+# grep
+grep -E "[a-z]+" filename
+echo this is a line. | egrep -o "[a-z]+\." # only part of matching
+grep -v match_pattern file #inverse output
+grep -c "text" filename #count match
+echo -e "1 2 3 4\nhello\n5 6" | egrep -c "[0-9]" => 2
+echo -e "1 2 3 4\nhello\n5 6" | egrep -o "[0-9]" | wc -l => 6
+grep -n #print line
+grep -l linux sample1.txt sample2.txt # list match file name only
+
+grep "text" . -R/r -n -i
+grep -e "pattern1" -e "pattern" # -E for regexp
+grep -f pattern_filesource_filename #
+
+grep "main()" . -r --include *.{c,cpp}
+grep "main()" . -r --exclude "README" #--exclude-dir --exclude-from
+
+grep "test" file* -lZ | xargs -0 rm # remove file* containing test
+greq -q
+return 0 if finding non-zero if not
+
+#Cutting a file column-wise with cut
+cut -f FIELD_LIST filename
+cut -f 2,3 filename
+cut -f3 --complement student_data.txt
+ls -l | cut -f3 -d' '
+ls -l | sed '1d' | cut -f1,4 -d' '
+
+# 
+paste file1 file2 file3 # like python zip
+
+command | awk '{ print $5 }'
+ls -l | awk '{ print $1 " : " $8 }'
+
+find . -name *.cpp -print0 | xargs -I{} -0 sed -i 's/Copyright/Copyleft/g' {}
+find . -name *.cpp -exec sed -i 's/Copyright/Copyleft/g' \{\} \;
+https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents
+https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html
+https://www.gnu.org/software/bash/manual/
+${parameter/pattern/string}
+${parameter//pattern/string} # all pattern that matched
+${string:4}
+${string:4:8}
+${string:(-1)}
+${string:(-2):2}
+
+seq 5 | tac
+
+Chapter 5: Tangled Web? Not at all
+
+# wget
+wget ftp://example_domain.com/somefile.img -O dloaded_file.img -o log
+wget -t 5 URL
+wget --limit-rate 20k http://example.com/file.iso
+wget -c URL # continue to download
+wget --mirror --convert-links exampledomain.com #download a websit
+wget -r -N -l -k DEPTH URL
+
+#lynx download webpages as a plain text
+lynx URL -dump > webpage_as_text.txt
+
+#curl
+curl URL --silent -O
+curl http://slynux.org -o index.html --progress
+curl http://example.com --cookie "user=slynux;pass=hack"
+curl URL --cookie-jar cookie_file --user-agent "Mozilla/5.0"
+
+#using -H to add headers
+curl -H "Host: www.slynux.org" -H "Accept-language: en" URL
+--limit-rate 20k --max-filesize bytes
+curl -u user:pass http://test_auth.com
+curl -u user http://test_auth.com
+
+#Use the -I or -head option with curl to dump only the HTTP headers
+curl -I www.google.com
+
+# POST with data
+curl URL -d "postvar=postdata2&postvar2=postdata2"
+# Post with wget
+wget http://book.sarathlakshman.com/lsc/mlogs/submit.php --post-data
+"host=test-host&user=slynux" -O output.html
+
+Chapter 6: the backup plan
+#tar
+tar -cf output.tar [SOURCES] #c-create file f->specify filename
+tar -tvf archive.tar
+tar -rf archive.tar x #append to tar
+tar -xf archive.tar #x->extract
+tar -xf archive.tar -C /path/to/extraction_directory
+tar cvf - files/ | ssh user@example.com "tar xv -C Documents/" # - standard for stdin, compress & transfer
+tar -Af file1.tar file2.tar
+tar -uf archive.tar filea # add to tar if modified
+tar -df archive.tar # compare changes
+tar -f archive.tar --delete file1 file2 .. # delete from tar
+
+tar acvf archive.tar.gz filea fileb filec # a based name to choose compressing method
+
+tar -cf arch.tar * --exclude "*.txt" # 
+tar --exclude-vcs -czvvf source_code.tar.gz eye_of_gnome_svn # exclude version control
+
+#gzip only works on one file
+gzip filename
+gunzip file.gz
+gzip -l file.gz
+cat file | gzip -c > file.gz # --fast or the--best
+tar -czvvf archive.tar.gz [FILES] #compress
+tar -xavvf archive.tar.gz -C extract_directory #decompress
+
+#zcat - reading gzipped files without extracting
+
+bzip2 file
+bunzip2 file.bz2
+tar -xvfj archieve.tar.bz2
+
+lzma filename
+unlzma file.lzma
+tar -cavvf --lzma archive.tar.lzma [FILES]
+tar -xvvfa archive.tar.lzma -C extract_directory
+
+#zip
+zip archive_name.zip [SOURCE FILES/DIRS]
+zip -r archive.zip folder1 folder2
+unzip file.zip
+zip file.zip -u newfile # update in zip file
+zip -d arc.zip file.txt # delete a file from zip
+
+#pbzip2 using more cores
+pbzip2 myfile.tar
+tar -c directory_to_compress/ | pbzip2 -c > myfile.tar.bz2
+pbzip2 -dc myfile.tar.bz2 | tar x
+
+#squashfs
+sudo mksquashfs /etc test.squashfs -e /etc/passwd /etc/shadow
+mkdir /mnt/squash
+mount -o loop compressedfs.squashfs /mnt/squash
+
+#backup files
+rsync -av /home/slynux/data slynux@192.168.0.6:/home/backups/
+data # a archiving, v verboser
+rsync -av source_dir username@host:PATH
+rsync -av username@host:PATH destination
+
+#backup whole disk as an image
+fsarchiver savefs backup.fsa /dev/sda1 # backup disk
+fsarchiver restfs backup.fsa id=0,dest=/dev/sda1 #id=0 denotes that we want to pick the first partition from the archive to the partition specified as dest=/dev/sda1
+fsarchiver restfs backup.fsa id=0,dest=/dev/sda1 id=1,dest=/dev/sdb1
+
+Chapter 7: the old-boy network
+#network setup
+ifconfig
+ifconfig wlan0 192.168.0.80 netmask 255.255.252.0
+dhclient eth0
+ifconfig | cut -c-10 | tr -d ' ' | tr -s '\n' # list network device
+ifconfig eth0
+ifconfig wlan0 | egrep -o "inet addr:[^ ]*" | grep -o "[0-9.]*"
+
+echo nameserver IP_ADDRESS >> /etc/resolv.conf
+host google.com
+nslookup google.com
+echo IP_ADDRESS symbolic_name >> /etc/hosts
+
+# through gateway to route package from one network to another, using route to add gw
+route
+route -n
+route add default gw 192.168.0.1 wlan0
+
+ping domain
+ping domain -c2 #ping two times return 0 if success 
+traceroute domain #list different hops
+fping -a 192.160.1/24 -g 2> /dev/null
+fping -a 192.168.0.1 192.168.0.255 -g
+
+#ssh
+ssh user@domain
+ssh user@locahost -p 422
+ssh user@locahost 'COMMANDS' # run command remotely and display local
+
+COMMANDS="command1; command2; command3"
+ssh user@hostname "$COMMANDS"
+#Redirecting data into stdin of remote host shell commands
+echo 'text' | ssh user@remote_host 'echo'
+
+ssh user@host "export DISPLAY=:0 ; command1; command2"""
+ssh -X user@host "command1; command2"
+
+#lftp
+lftp username@ftphost
+cd dir
+lcd idr
+put file
+get file
+
+#scp
+scp user@remotehost:/home/path/filename filename
+scp -r user@remotehost:/home/path/dir	dirname
+
+#ssh login without password
+ssh-keygen -t rsa
+ssh USER@REMOTE_HOST "cat >> ~/.ssh/authorized_keys" < ~/.ssh/id_rsa.pub
+
+#mount remote drive to a local mount point
+sshfs -o allow_other user@remotehost:/home/path /mnt/mountpoint
+
+#list service port
+lsof -i # last column laptop.local:41197->192.168.0.2:3128 local:port->remote:port
+lsof -i | grep ":[0-9]\+->" -o | grep "[0-9]\+" -o | sort | uniq
+netstat -nlp -tnp
+
+#create arbitary sockets
+nc -l 1234 #list on port 1234
+nc HOST 1234 #connect to host
+nc -l 1234 > destination_filename
+nc HOST 1234 < source_filename
+
+#iptables
+iptables -A OUTPUT -d 8.8.8.8 -j DROP
+iptables -A OUTPUT -p tcp -dport 21 -j DROP
+
+
+Chapter 8: put on the Mointor's cap
+du -sh FILE*
+du -a Directory
+du -c *.sh
+du --exclude "*.txt" FILES(s)
+find . -type f -exec du -k {} \; | sort -nrk 1 | head
+
+df -h
+
+#calculate the time of command
+time COMMAND
+/usr/bin/time -o output.txt COMMAND
+
+ls -l | tail -n +2 # strip off header information
+
+watch -n 5 'ls -l'
+
+#log message
+logger LOG_MESSAGE # write inotu /var/log/messages
+logger -t TAG This is a message
+
+powertop
+iotop
+iotop -b -n 2
+iotop -p PID
+
+Chapter 9: Administration calls
+ps #Process Status
+ps -f
+ps -axf
+ps [OTHER OPTIONS] -o parameter1,parameter2,parameter3 ..
+ps -eo comm,pcpu --sort -pcpu | head
+ps -C COMMAND_NAME
+ps -C bash -o pid=
+ps -ef | ps aux
+pgrep bash
+ps -t pts/0,pts/1 # find process specifying terminal
+top
+
+which ls
+whereis ls
+file /bin/ls
+whatis ls
+uptime
+
+kill -l # list all signal available
+kill -s SIGKILL PROCESS_ID
+kill -9 PROCESS_ID
+killall process_name
+trap 'signal_handler_function_name' SIGNAL LIST
+
+#Gathering system information
+hostname
+uname -n #hostname
+uname -a #linux kernal, hardware archi
+uname -r #kernal release
+uname -m #machine type
+cat /proc/cpuinfo # cpu detail
+cat /proc/cpuinfo | sed -n '5p'
+cat /proc/meminfo
+cat /proc/partitions
+fdisk -l
+lshw #list hardware
+
+cat /proc/$PID/environ|cwd|exe|fd
+
+#scheduling with cron
+cron job to execute the test.sh script at the second minute of all hours on all days:
+02 * * * * /home/slynux/test.sh
+In order to run the script at the fifth, sixth, and seventh hours on all days, use:
+00 5,6,7 * * /home/slynux/test.sh
+Execute script.sh at every hour on Sundays as follows:
+00 */12 * * 0 /home/slynux/script.sh
+Shutdown the computer at 2 A.M. everyday as follows:
+00 02 * * * /sbin/shutdown -h
+
+

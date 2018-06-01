@@ -11,7 +11,7 @@ cmd1 ; cmd2 <=>
 cmd1
 cmd2
 
-escape ' "" !
+escape ' "" ! ;
 \t \n
 echo -e "1\t2\t3"
 
@@ -26,7 +26,7 @@ reset = 0, black = 40, red = 41, green = 42, yellow = 43, blue = 44, magenta = 4
 
 In Bash, the value for every variable is string, regardless of whether we assign variables with quotes or without quotes.
 
-# all is an file
+# all thing in linux is an file
 cat /proc/$PID/environ # find the env of the process is using
 pgrep java #get pid of process
 sudo cat /proc/1103/environ | tr '\0' '\n'
@@ -90,7 +90,7 @@ array_var[4]="test5"
 array_var[5]="test6"
 
 array+=(2)
-echo ${array_var[*]}
+echo ${array_var[@]}
 echo ${array_var[*]}
 echo ${array_var[0]}
 echo ${array_var[$index]}
@@ -423,7 +423,7 @@ paste file1 file2 file3 # like python zip
 command | awk '{ print $5 }'
 ls -l | awk '{ print $1 " : " $8 }'
 
-find . -name *.cpp -print0 | xargs -I{} -0 sed -i 's/Copyright/Copyleft/g' {}
+find . -name *.cpp -print0 | xargs -I {} -0 sed -i 's/Copyright/Copyleft/g' {}
 find . -name *.cpp -exec sed -i 's/Copyright/Copyleft/g' \{\} \;
 https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents
 https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html
@@ -622,6 +622,7 @@ time COMMAND
 /usr/bin/time -o output.txt COMMAND
 
 ls -l | tail -n +2 # strip off header information
+ls -t | tr '\0' "\n" | tail -n +2 | xargs rm -rf # keep the newest
 
 watch -n 5 'ls -l'
 
@@ -685,3 +686,13 @@ Shutdown the computer at 2 A.M. everyday as follows:
 00 02 * * * /sbin/shutdown -h
 
 
+# -----------------------------------------extra-----------------------------------------
+Note that var = value and var=value are different. It is a usual mistake to write var =value instead of var=value. The later one is the assignment operation, whereas the earlier one is an equality operation.
+echo {1..4}
+echo {1..302..8}
+In order to print all lines excluding the first M lines, use the following code:
+tail -n +(M+1)
+cut range_fields.txt -c1-3,6-9 --output-delimiter ","
+echo this is an example | sed 's/\w\+/[&]/g'
+
+awk ' BEGIN{ print "start" } pattern { commands } END{ print "end" } file

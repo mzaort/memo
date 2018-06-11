@@ -1,0 +1,59 @@
+Note sa shows all the parameters
+
+$$ current process PID
+$! last command PID running in background
+$# # of positional arguments
+
+
+logical value to produce: test [[ (( 
+
+brace expansion
+pre{d,l}ate
+{{1..3},{a..c}}
+1{a..c} 2{a..c} 3{a..c}
+{1..3}{a..c}
+{01..13..3}
+{a..h..3}
+
+Tilde Expansion
+~
+~ubuntu => /home/ubuntu
+
+Path Expansion
+unquoted works on the command line containing ? * [ are file globing
+
+Process substitution.
+sa <(ls -l) >(pr -Tn)
+:/dev/fd/63:
+:/dev/fd/62:
+
+#using getopts to get arguments
+
+$1 $9 ${10}
+shift 3
+shift "$#"
+
+$* $@ "$*" "$@" are different
+./test.sh one two "three four"
+
+Using "$*":
+one two three four
+
+Using $*:
+one
+two
+three
+four
+
+Using "$@":
+one
+two
+three four
+
+Using $@:
+one
+two
+three
+four
+
+

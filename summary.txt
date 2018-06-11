@@ -1,0 +1,147 @@
+0. Applicaton startup process
+
+1. Formula
+	1.	formula input
+		switch editor
+		synchronize editor value between cell and formula bar
+		formula bar drag and drop to expand the range
+		formula hint and selector
+		formula result preview
+		how to parse formula: detect range acceptance
+		formula autocomplete
+		paint different style range
+		handle caret (cross-browser)
+		handle the bound of formula editor: line feed
+		handle keyboard event and mouse event to select a range (input, mouse, keyboard, mouse + keyboard)
+	2. formula register to formula range service. (insert/delete/move)
+		range service, range parser, formula parser
+	3. formula translation for copy/cut/sort...
+		absolute reference and relative reference
+	4. formula calculation frontend
+		cellmodified->calculate init->handler.delay->register/unregister->checkAffected->collectparam->send request->wait for callback
+	5. formula parser
+		tokenizer formatter translater parseModel
+	6. formula calculation backend
+		
+2. Connection Manager & WebObserver
+	1. one ap maintain all websocket connections
+	2. ap send messages to other aps using kafka
+	3. global redis authenication for collaborative certification
+
+3. File download/upload to ods/xlsx using poi.
+4. Collaborative editing & undo/redo
+5. Team development maintainance
+6. Chennai development support
+7. Selenide test
+
+public synchronized void execute(Action action){
+	for(map){
+		map.computeIfPresent((k,v)->v.length == 0?null: v);
+	}
+	map.putIfAbsent(hash, ArrayDeque)
+	deque.offer(action)
+	trigger(hash)
+}
+
+public void execute(Action action){
+	map.getOrDefault(hash, new)
+	queue.offer(action)
+	map.putIfAbsent(hash,queue)
+	trigger(hash)
+}
+
+private void trigger(hash){
+	map.computeIfPresent(hash, (k, v)->{
+		if(v == null || v.isEmpty()) return null;
+		queue = v;
+		pool.submit(()->{
+			while(!empty){}
+		});
+		return null;
+	});
+}
+
+	@Bean
+    @Qualifier("raw")
+    public KeyValueAccess rawKeyValueAccess() {
+        CassandraAccessDatastax kva = new CassandraAccessDatastax(cassandraSettingDao(), tenantManager, tenantRegistery);
+        return kva;
+    }
+
+	@Bean
+    @Primary
+    public KeyValueAccess keyValueAccess() {
+        final ProxyFactory factory = new ProxyFactory(rawKeyValueAccess());
+        factory.addAdvice(keyValueAccessInterceptor());
+        final KeyValueAccess kva = (KeyValueAccess)factory.getProxy();
+        return kva;
+    }
+
+public final class KeyValueAccessInterceptor implements MethodInterceptor {
+
+    private static final long serialVersionUID = 1L;
+    private static final Logger LOGGER = LoggerFactory.getLogger(KeyValueAccessInterceptor.class);
+
+    @Autowired(required = false)
+    private List<KeyValueAccessWrapper> wrappers;
+
+    @PostConstruct
+    void init() {
+        LOGGER.info("available KeyValueAccessWrappers: {}", wrappers);
+    }
+
+    private KeyValueAccess getWrappedKeyValueAccess(KeyValueAccess kva) {
+        if (wrappers != null) {
+            for (KeyValueAccessWrapper wrapper : wrappers) {
+                kva = wrapper.wrap(kva);
+            }
+        }
+        return kva;
+    }
+
+    @Override
+    public Object invoke(MethodInvocation invocation) throws Throwable {
+        final Object obj = invocation.getThis();
+        if (!(obj instanceof KeyValueAccess)) {
+            return invocation.proceed();
+        }
+        final KeyValueAccess kva = getWrappedKeyValueAccess((KeyValueAccess)obj);
+        final Method method = invocation.getMethod();
+        final Object[] arguments = invocation.getArguments();
+        try {
+            return method.invoke(kva, arguments);
+        } catch (InvocationTargetException e) {
+            final Throwable cause = e.getCause();
+            LOGGER.debug("detected {} thrown by {}", cause.getClass().getName(), method);
+            throw cause;
+        }
+    }
+
+}
+
+DefaultSingletonBeanRegistry
+LoadTimeWeaverAware
+AbstractAutowireCapableBeanFactory#doCreateBean
+multiple Bean factory
+28 Internal BeanPostProcessor, such as AsyncAnnotationBeanPostProcessor: AsyncAnnotationAdvisor AnnotationAsyncExecutionInterceptor AnnotationAsyncExecutionInterceptor
+
+Ajax request's process.
+BeanUtils
+
+when jvm stop the world
+InvocableHandlerMethod#getMethodArgumentValue .dataBinderFactory
+
+spring extends javax:
+SpringServletContainerInitializer extends ServletContainerInitializer: servlet container use its implementation to startup
+ContextLoaderListener extends ServletContextListener
+DispatcherServlet extends HttpServlet
+
+
+ApplicationContextInitializer#initialize to customizeContext
+ContextLoaderListener extends ContextLoader#customizeContext
+
+HttpStatus code 
+spring web startup: ServletContainerInitializer AbstractAnnotationConfigDispatcherServletInitializer AbstractDispatcherServletInitializer
+
+
+

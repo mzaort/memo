@@ -53,7 +53,7 @@ cat ~/.bashrc | grep PS1 # Prompt String 1
 prepend() { [ -d "$2" ] && eval $1=\"$2':'\$$1\" && export $1; }
 prepend PATH /opt/myapp/bin
 
-The Bash shell environment can perform basic arithmetic operations using the commands let, (( )), and []. The two utilities expr and bc are also very helpful in performing advanced operations.
+The Bash shell environment can perform basic arithmetic operations using the commands let, $(( )), and $[]. The two utilities expr and bc are also very helpful in performing advanced operations.
 let r=number1+number2
 result=$[ no1 + no2 ]
 result=$(( no1 + 50 ))
@@ -142,6 +142,7 @@ read -s var
 read -p 'Enter input:' var
 read -t timeout var
 read -d delim_char var
+read -a 
 
 # repeat until succeed
 repeat() { while true; do $@ && return; done } # /bin/true
@@ -407,7 +408,7 @@ grep "main()" . -r --include *.{c,cpp}
 grep "main()" . -r --exclude "README" #--exclude-dir --exclude-from
 
 grep "test" file* -lZ | xargs -0 rm # remove file* containing test
-greq -q
+grep -q
 return 0 if finding non-zero if not
 
 #Cutting a file column-wise with cut
@@ -497,7 +498,7 @@ cat file | gzip -c > file.gz # --fast or the--best
 tar -czvvf archive.tar.gz [FILES] #compress
 tar -xavvf archive.tar.gz -C extract_directory #decompress
 
-#zcat - reading gzipped files without extracting
+#zcat - reading gzipped files without extracting # bzcat
 
 bzip2 file
 bunzip2 file.bz2
@@ -554,6 +555,7 @@ echo IP_ADDRESS symbolic_name >> /etc/hosts
 route
 route -n
 route add default gw 192.168.0.1 wlan0
+ip route
 
 ping domain
 ping domain -c2 #ping two times return 0 if success 

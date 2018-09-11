@@ -1,3 +1,5 @@
+GIT MAVEN
+
 0. Applicaton startup process
 
 1. Formula

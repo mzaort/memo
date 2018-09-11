@@ -116,6 +116,7 @@ rm -rf /tmp/kafka-logs/*
 dirname /root/user -> /root
 basename ~/Documents/a.txt -> a.txt
 echo "hello.txt" | sed 's/.*\.\([^.]*\)/\1/' # extract file type
+or echo hello.txt | sed -r 's/.*\.([^.]*)/\1/'
 readlink
 
 unset
@@ -493,7 +494,7 @@ http://www.softpanorama.org/Scripting/Shellorama/Bash_as_command_interpreter/bas
 # !n:1 the first arguments of the nth command
 sudo !! -- reexecute the last command with prefix sudo.
 cd !$ -- cd to the directory which is the last argument of the previous command. This idiom is based on the ability to specify the last argument of the prev command. !!:$  designates the last word of the preceding command. This can be shortened to !$.  The addressing reminds vi and as in vi you can work with any command in history, not only the last. See below
-Modification of the cd command when two long (deeply nested) directories differ in only one part, especially if this part is somewhere in the middle. You can modify the command on the fly using search-and-replace type modifier  s/old/new/ (or s^old^new^ -- the delimiter is actually arbitrary)
+Modification of the cd command when two long (deeply nested) directories differ in only one part, especially if this part is somewhere in the middle. You can modify the command on the fly using search-and-replace type modifier  !!:s/old/new/ (or !!:s^old^new^ -- the delimiter is actually arbitrary)
 use :p suffix with the ! for repeating a command will cause the command to be displayed, but not run( See modifiers for more info)  Useful if you want to repeat a command, but want to double check the command you want to run. For example if it perform some action on system files or directories. In the example below !string  runs the most recent command beginning with the string you specify.  Using Ctrl-R might be a better deal
 
 Words. Words are zero relative, that is, word zero is the command itself. The first argument (arg1) on the command line is word 1.
@@ -557,3 +558,39 @@ cdm() {
 	menu "${item[@]}" Quit:
 }
 
+
+top -n 1 -b > top-output.txt # output top info, -b batch mode
+top -n 10 # print 10 freshing of stat
+top, press k to kill without exit top
+top, press d to change refreshing time
+top, press c to show command absolute path
+
+# install redis with specific version
+sudo apt-get install package=version
+# show available version of a package
+apt-cache policy <packageName>
+
+# sudo: unable to resolve host <USER>
+add one entry to <USER>
+
+x=$( curl -sw '%{http_code}' http://www.baidu.com -o /tmp/ )
+x=$( curl -sw '%{content_type}' http://www.baidu.com -o /tmp/ )
+
+http://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/index.html
+
+find . -name spreadsheet-validation-model.js -print -quit # find the first and quit
+
+nohup python -m SimpleHTTPServer 8707 &
+sudo nohup python -m http.server 3000 &
+
+# telnet a website
+telnet stackoverflow.com 80
+GET /questions HTTP/1.0 # HTTP
+yes # TCP
+
+parse yaml in shell
+https://gist.github.com/pkuczynski/8665367
+https://coderwall.com/p/xatm5a/bash-one-liner-to-read-yaml-files
+
+ls folder/*.war &>/dev/null && {
+} # judge whether some file exists

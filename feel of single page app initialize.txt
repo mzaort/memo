@@ -1,0 +1,7 @@
+After (?) the page is loaded, the single page is created and then initialized. Before that, all the component is registered to wap.core.app.View based their constructor and css class name. In the process of initializaiton, the registed component is initialized one by one.
+
+After all of the component instance is initialized, they are organized into a tree (or several tree by parent.addChild(child)).
+
+After the tree is built, all the component are decorated.
+wap.core.app.View.registerComponent('wap.core.ui.spreadsheet.component.Spreadsheet',
+  wap.core.ui.spreadsheet.component.Spreadsheet); in spreadsheet-container.js this is the root of tee. Then the component is decorated, followed by its children.

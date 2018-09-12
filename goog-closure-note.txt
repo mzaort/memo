@@ -1,0 +1,53 @@
+1. goog.async.Delay encapsulates setTimeOut
+2. goog.History: navigation history?
+3. goog.Promise: a way to organize callback and asynchronized code.
+4. goog.Timer encapsulates setTimeInterval&setTimeOut, goog.async.Delay invokes timer.
+	goog.Timer.callOnce
+	goog.Timer.promise(delay, value) resolve value after delay
+5. goog.array == Array
+6. goog.async encapsulates all time-delayed function.
+7. goog.async.nextTick fire callback as soon as possible.
+8. goog.async.Debouncer: run callback after the last fire time
+9. goog.async.Throttle: run callback after the first fire and suppress the following fires in an interval
+10. goog.async.ConditionalDelay: 
+
+11. goog.color: handle color
+12. goog.crypt: crypt algorithm
+13. goog.date.*: encapsulate date
+14. goog.db.*: indexDB
+15. goog.dom: dom model
+16. goog.ds.*: datasource
+17. goog.editor.*: a sample editor
+18. goog.events: event model encapsulation
+19. goog.fs.*: file reader/writer
+20. goog.functions: and/or/not/identity...
+21. goog.fx: annimation & ...
+22. goog.graphics: canvas graphics
+23. goog.history: window.history using
+24. goog.html: safe encoding & sanitizer
+25. goog.i18n: time & string format
+26. goog.json: for json
+27. goog.log: log system for js
+28. goog.math.*: tool and class: Line, Long, Vec3
+29. goog.memorize: cache function result
+30. goog.messaging.*: a lot of channels & 
+31. goog.module: ...
+32. goog.net.*: encapsulate alot 
+33. goog.object.*: == object
+34. goog.positioning.*: define overflow/popup...
+35. goog.string: == string
+36. goog.structs.*: alot of data structure implementation
+37. goog.style.*: css related.
+38. goog.test.*: test framework
+39. goog.ui.*: ui set of google
+40. 
+
+
+goog.event.model
+
+1.original element and browserevent
+are translated to 
+component and event
+2.component acts like element to dispatch event
+3.can listen the event of an component to perform action.
+4.goog.event.listen not only listen to the component(goog.events.listenable), but also original browser element(EventTarget).
